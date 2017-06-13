@@ -40,7 +40,7 @@ module.exports = {
   output: {
     path: assetsPath,
     filename: `js/[name]-${gitHash}.js`,
-    publicPath: '/',
+    publicPath: '',
     chunkFilename: `[name]-${gitHash}.js`
   },
   devServer: {
