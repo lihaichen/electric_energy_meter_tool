@@ -5,9 +5,10 @@
   "main": "./node/main.js",
   "scripts": {
     "test": "better-npm-run gen-dev-config && better-npm-run build",
-    "dev": "better-npm-run gen-dev-config &&  better-npm-run dev",
+    "dev": "better-npm-run gen-dev-config && better-npm-run dev",
     "build": "better-npm-run gen-build-config && better-npm-run build",
-    "prod": "better-npm-run gen-prod-config && better-npm-run prod"
+    "prod": "better-npm-run gen-prod-config && better-npm-run prod",
+    "electron-dev": "better-npm-run electron-dev"
   },
   "betterScripts": {
     "gen-dev-config": {
@@ -44,6 +45,12 @@
       "command": "node_modules/webpack/bin/webpack.js --config ./webpack/prod.config.js",
       "env": {
         "NODE_ENV": "prod"
+      }
+    },
+    "electron-dev": {
+      "command": "./node_modules/electron/dist/Electron.app/Contents/MacOS/Electron ./node/main.js",
+      "env": {
+        "NODE_ENV": "dev"
       }
     }
   },
