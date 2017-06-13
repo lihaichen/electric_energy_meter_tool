@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import './test.less';
 const prefixCls = 'Test';
 import {connect} from 'react-redux';
+import {Link} from 'react-router';
 import * as testActions from '../../redux/modules/test/action';
 import * as pageActions from '../../redux/modules/page/action';
 @connect(
@@ -36,6 +37,7 @@ export default class Test extends Component {
     return (
       <div className={`${prefixCls}`}>
         <p>测试组件</p>
+         <Link to="">跳转到pudge</Link>
         <img src="images/1.jpg"/>
       </div>);
   }
