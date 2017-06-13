@@ -13,6 +13,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const theme = {};
 module.exports = {
   devtool: 'cheap-module-source-map',
+  target: 'electron-renderer',
   entry: {
     main: [
       './src/index.js'
@@ -33,6 +34,7 @@ module.exports = {
       template: './template/index.html',
       filename: path.resolve(assetsPath, './index.html')
     }),
+    new webpack.DefinePlugin({"global.GENTLY": false})
   ],
   module: {
     rules: [

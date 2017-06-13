@@ -8,3 +8,5 @@
 react工程依赖
 https://github.com/lihaichen/webpack2Demo
 ## 主要修改记录
+- webpack配置文件加入  target: 'electron-renderer' ，指示打包的程序是electron渲染线程，不是web程序，编译的程序只能在electron打开。
+- plugins中加入 new webpack.DefinePlugin({ "global.GENTLY": false })，不然会出现require函数没有找到，原理不是很懂。

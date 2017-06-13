@@ -15,3 +15,4 @@ jsconfig.json
 git.json
 Makefile
 config.json
+release/

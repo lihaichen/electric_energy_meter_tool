@@ -19,6 +19,7 @@ proxy.forEach(function(item) {
 
 module.exports = {
   devtool: 'cheap-module-eval-source-map',
+  target: 'electron-renderer',
   entry: {
     main: [
       'webpack-dev-server/client?http://0.0.0.0:8989',
@@ -65,6 +66,7 @@ module.exports = {
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor'
     }),
+    new webpack.DefinePlugin({"global.GENTLY": false})
   ],
   module: {
     rules: [
