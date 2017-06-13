@@ -12,3 +12,5 @@ https://github.com/lihaichen/webpack2Demo
 - plugins中加入 new webpack.DefinePlugin({ "global.GENTLY": false })，不然会出现require函数没有找到，原理不是很懂。
 - 添加node目录，node目录是操作底层的接口，比较文件的操作，数据库等。
 - 将webpack的配置文件output->publicPath 置空
+- 图片放到static/images 引用时不能加 '/'。
+- 

@@ -8,7 +8,8 @@
     "dev": "better-npm-run gen-dev-config && better-npm-run dev",
     "build": "better-npm-run gen-build-config && better-npm-run build",
     "prod": "better-npm-run gen-prod-config && better-npm-run prod",
-    "electron-dev": "better-npm-run electron-dev"
+    "electron-dev": "better-npm-run electron-dev",
+    "electron-build": "better-npm-run electron-build"
   },
   "betterScripts": {
     "gen-dev-config": {
@@ -51,6 +52,12 @@
       "command": "./node_modules/electron/dist/Electron.app/Contents/MacOS/Electron ./node/main.js",
       "env": {
         "NODE_ENV": "dev"
+      }
+    },
+    "electron-build": {
+      "command": "./node_modules/electron/dist/Electron.app/Contents/MacOS/Electron ./node/main.js",
+      "env": {
+        "NODE_ENV": "build"
       }
     }
   },
