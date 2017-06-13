@@ -2,7 +2,7 @@
   "name": "webpack2",
   "version": "1.0.0",
   "description": "webpack2",
-  "main": "./src/index.js",
+  "main": "./node/main.js",
   "scripts": {
     "test": "better-npm-run gen-dev-config && better-npm-run build",
     "dev": "better-npm-run gen-dev-config &&  better-npm-run dev",
