@@ -49,7 +49,7 @@
       }
     },
     "electron-dev": {
-      "command": "./node_modules/electron/dist/Electron.app/Contents/MacOS/Electron ./node/main.js",
+      "command": "electron ./node/main.js",
       "env": {
         "NODE_ENV": "dev"
       }
