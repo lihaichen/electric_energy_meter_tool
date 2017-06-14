@@ -36,31 +36,31 @@
       }
     },
     "dev": {
-      "command": "./node_modules/webpack-dev-server/bin/webpack-dev-server.js --config ./webpack/dev.config.js",
+      "command": "node --trace-warnings ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --config ./webpack/dev.config.js",
       "env": {
         "NODE_ENV": "dev"
       }
     },
     "build": {
-      "command": "node_modules/webpack/bin/webpack.js --config ./webpack/build.config.js",
+      "command": "node --trace-warnings ./node_modules/webpack/bin/webpack.js --config ./webpack/build.config.js",
       "env": {
         "NODE_ENV": "build"
       }
     },
     "prod": {
-      "command": "node_modules/webpack/bin/webpack.js --config ./webpack/prod.config.js",
+      "command": "node --trace-warnings ./node_modules/webpack/bin/webpack.js --config ./webpack/prod.config.js",
       "env": {
         "NODE_ENV": "prod"
       }
     },
     "electron-dev": {
-      "command": "./node_modules/.bin/electron ./node/main.js",
+      "command": "node --trace-warnings ./node_modules/.bin/electron ./node/main.js",
       "env": {
         "NODE_ENV": "dev"
       }
     },
     "electron-build": {
-      "command": "./node_modules/.bin/electron ./node/main.js",
+      "command": "node --trace-warnings ./node_modules/.bin/electron ./node/main.js",
       "env": {
         "NODE_ENV": "build"
       }
