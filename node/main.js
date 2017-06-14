@@ -17,11 +17,11 @@ function createWindow() {
   if (process.env.NODE_ENV === 'dev') {
     mainWindow.loadURL('http://localhost:9999/index.html');
     // Open the DevTools.
-    mainWindow.webContents.openDevTools();
   } else {
-    const urlPath = path.join(__dirname, '../static');
+    const urlPath = path.join(__dirname, '..');
     mainWindow.loadURL(`file://${urlPath}/index.html`);
   }
+  mainWindow.webContents.openDevTools();
   mainWindow.webContents.send('transitionTo', url);
   // Emitted when the window is closed.
   mainWindow.on('closed', function() {

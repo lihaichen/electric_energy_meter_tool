@@ -2,19 +2,22 @@
   "name": "webpack2",
   "version": "1.0.0",
   "description": "webpack2",
-  "main": "./node/main.js",
+  "main": "./static/node/node.js",
   "scripts": {
-    "test": "better-npm-run gen-dev-config && better-npm-run build",
     "dev": "better-npm-run gen-dev-config && better-npm-run dev",
     "build": "better-npm-run gen-build-config && better-npm-run build",
     "prod": "better-npm-run gen-prod-config && better-npm-run prod",
-    "electron-start-dev": "better-npm-run electron-start-dev",
-    "electron-start-build": "better-npm-run electron-start-build",
-    "package-all": "npm run build && build -mwl",
-    "package-winX64": "npm run build && build --win --x64",
-    "package-winX86": "npm run build && build --win --ia32",
-    "package-linux": "npm run build && build --mac",
-    "package-mac": "npm run build && build --mac",
+    "electron-dev": "better-npm-run electron-dev",
+    "electron-build": "better-npm-run electron-build",
+    "electron-prod": "better-npm-run electron-prod",
+    "electron-run-dev": "better-npm-run electron-dev && better-npm-run electron-run-dev",
+    "electron-run-build": "better-npm-run electron-build && better-npm-run electron-run-build",
+    "electron-run-prod": "better-npm-run electron-prod && better-npm-run electron-run-prod",
+    "package": "better-npm-run prod && better-npm-run electron-prod && build -mwl",
+    "package-winX64": "better-npm-run prod && better-npm-run electron-prod && build --win --x64",
+    "package-winX86": "better-npm-run prod && better-npm-run electron-prod && build --win --ia32",
+    "package-linux": "better-npm-run prod && better-npm-run electron-prod && build --linux",
+    "package-mac": "better-npm-run build && better-npm-run electron-dev  && build --mac",
     "postinstall": "install-app-deps"
   },
   "betterScripts": {
@@ -54,16 +57,40 @@
         "NODE_ENV": "prod"
       }
     },
-    "electron-start-dev": {
-      "command": "node --trace-warnings ./node_modules/.bin/electron ./node/main.js",
+    "electron-dev": {
+      "command": "node --trace-warnings ./node_modules/webpack/bin/webpack.js --config ./webpack/node.config.js",
       "env": {
         "NODE_ENV": "dev"
       }
     },
-    "electron-start-build": {
+    "electron-build": {
+      "command": "node --trace-warnings ./node_modules/webpack/bin/webpack.js --config ./webpack/node.config.js",
+      "env": {
+        "NODE_ENV": "build"
+      }
+    },
+    "electron-prod": {
+      "command": "node --trace-warnings ./node_modules/webpack/bin/webpack.js --config ./webpack/node.config.js",
+      "env": {
+        "NODE_ENV": "prod"
+      }
+    },
+    "electron-run-dev": {
+      "command": "node --trace-warnings ./node_modules/.bin/electron ./static/node/node.js",
+      "env": {
+        "NODE_ENV": "dev"
+      }
+    },
+    "electron-run-build": {
       "command": "node --trace-warnings ./node_modules/.bin/electron ./node/main.js",
       "env": {
         "NODE_ENV": "build"
+      }
+    },
+    "electron-run-prod": {
+      "command": "node --trace-warnings ./node_modules/.bin/electron ./node/main.js",
+      "env": {
+        "NODE_ENV": "prod"
       }
     }
   },
@@ -76,9 +103,7 @@
     "appId": "org.lhc.ElectronReact",
     "files": [
       "static/",
-      "node_modules/",
-      "index.html",
-      "node/main.js"
+      "node_modules/"
     ],
     "dmg": {
       "contents": [

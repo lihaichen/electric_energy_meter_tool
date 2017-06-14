@@ -4,6 +4,7 @@ dist/
 static/index.html
 static/js/
 static/stylesheets/
+static/node/
 .*/
 *.iml
 webpack-assets.json
