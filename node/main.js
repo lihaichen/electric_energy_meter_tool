@@ -11,29 +11,17 @@ const url = require('url');
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
 
-// In main process.
-const {ipcMain} = require('electron');
-ipcMain.on('asynchronous-message', (event, arg) => {
-  console.log('主线程asynchronous-message', arg);  // prints "ping"
-  event.sender.send('asynchronous-reply', 'pong');
-});
-
-ipcMain.on('synchronous-message', (event, arg) => {
-  console.log('synchronous-message', arg);  // prints "ping"
-  event.returnValue = 'pong';
-});
-
 function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({width: 800, height: 600});
   if (process.env.NODE_ENV === 'dev') {
     mainWindow.loadURL('http://localhost:9999/index.html');
+    // Open the DevTools.
+    mainWindow.webContents.openDevTools();
   } else {
     const urlPath = path.join(__dirname, '../static');
     mainWindow.loadURL(`file://${urlPath}/index.html`);
   }
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools();
   mainWindow.webContents.send('transitionTo', url);
   // Emitted when the window is closed.
   mainWindow.on('closed', function() {
@@ -68,3 +56,16 @@ app.on('activate', function() {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+
+// In main process.
+const {ipcMain} = require('electron');
+ipcMain.on('asynchronous-message', (event, arg) => {
+  console.log('主线程asynchronous-message', arg);  // prints "ping"
+  event.sender.send('asynchronous-reply', 'pong');
+});
+
+ipcMain.on('synchronous-message', (event, arg) => {
+  console.log('synchronous-message', arg);  // prints "ping"
+  event.returnValue = 'pong';
+});
+

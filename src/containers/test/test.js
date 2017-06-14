@@ -3,6 +3,7 @@ import './test.less';
 const prefixCls = 'Test';
 import {connect} from 'react-redux';
 import {Link} from 'react-router';
+import {ipcRenderer} from 'electron';
 import * as testActions from '../../redux/modules/test/action';
 import * as pageActions from '../../redux/modules/page/action';
 @connect(
@@ -28,8 +29,10 @@ export default class Test extends Component {
 
   componentWillMount() {
     this.props.updateTestPageStatus({count: 123});
-    // this.props.getApiTest();
-    // testActions.testCompose(this.context.store);
+  }
+
+  onClick() {
+    console.log(ipcRenderer.sendSync('synchronous-message', 'ping'));
   }
 
   render() {
@@ -37,6 +40,7 @@ export default class Test extends Component {
     return (
       <div className={`${prefixCls}`}>
         <p>测试组件</p>
+        <button onClick={this.onClick.bind(this)}>同步请求</button>
         <Link to="/Pudage">跳转到pudge</Link>
         <img src="images/1.jpg"/>
       </div>);

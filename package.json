@@ -9,7 +9,12 @@
     "build": "better-npm-run gen-build-config && better-npm-run build",
     "prod": "better-npm-run gen-prod-config && better-npm-run prod",
     "electron-dev": "better-npm-run electron-dev",
-    "electron-build": "better-npm-run electron-build"
+    "electron-build": "better-npm-run electron-build",
+    "package-all": "npm run build && build -mwl",
+    "package-winX64": "npm run build && build --win --x64",
+    "package-winX86": "npm run build && build --win --ia32",
+    "package-linux": "npm run build && build --mac",
+    "package-mac": "npm run build && build --mac"
   },
   "betterScripts": {
     "gen-dev-config": {
@@ -63,7 +68,46 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/lihaichen/webpack2"
+    "url": "https://github.com/lihaichen/ElectronReactDemo"
+  },
+  "build": {
+    "productName": "ElectronReact",
+    "appId": "org.lhc.ElectronReact",
+    "files": [
+      "static/",
+      "node_modules/",
+      "index.html",
+      "node/main.js"
+    ],
+    "dmg": {
+      "contents": [
+        {
+          "x": 130,
+          "y": 220
+        },
+        {
+          "x": 410,
+          "y": 220,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    },
+    "linux": {
+      "target": [
+        "deb",
+        "AppImage"
+      ]
+    },
+    "directories": {
+      "buildResources": "resources",
+      "output": "release"
+    }
   },
   "author": "lihaichen",
   "license": "ISC",
