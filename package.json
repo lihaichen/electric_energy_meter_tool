@@ -17,7 +17,7 @@
     "package-winX64": "better-npm-run prod && better-npm-run electron-prod && build --win --x64",
     "package-winX86": "better-npm-run prod && better-npm-run electron-prod && build --win --ia32",
     "package-linux": "better-npm-run prod && better-npm-run electron-prod && build --linux",
-    "package-mac": "better-npm-run build && better-npm-run electron-dev  && build --mac",
+    "package-mac": "better-npm-run prod && better-npm-run electron-prod  && build --mac",
     "postinstall": "install-app-deps"
   },
   "betterScripts": {

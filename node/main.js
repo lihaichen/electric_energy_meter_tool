@@ -16,12 +16,16 @@ function createWindow() {
   mainWindow = new BrowserWindow({width: 800, height: 600});
   if (process.env.NODE_ENV === 'dev') {
     mainWindow.loadURL('http://localhost:9999/index.html');
+    mainWindow.webContents.openDevTools();
     // Open the DevTools.
+  } else if (process.env.NODE_ENV === 'build') {
+    const urlPath = path.join(__dirname, '../static');
+    mainWindow.loadURL(`file://${urlPath}/index.html`);
+    mainWindow.webContents.openDevTools();
   } else {
     const urlPath = path.join(__dirname, '..');
     mainWindow.loadURL(`file://${urlPath}/index.html`);
   }
-  mainWindow.webContents.openDevTools();
   mainWindow.webContents.send('transitionTo', url);
   // Emitted when the window is closed.
   mainWindow.on('closed', function() {
