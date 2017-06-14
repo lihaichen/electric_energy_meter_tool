@@ -55,7 +55,7 @@
       }
     },
     "electron-build": {
-      "command": "./node_modules/electron/dist/Electron.app/Contents/MacOS/Electron ./node/main.js",
+      "command": "./node_modules/.bin/electron ./node/main.js",
       "env": {
         "NODE_ENV": "build"
       }
