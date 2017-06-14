@@ -5,7 +5,7 @@ export default class Pudage extends Component {
     return (
       <div>
         <p>Pudage</p>
-        <Link to="">跳转到冰女</Link>
+        <Link to="/RylaiCrestfall">跳转到冰女</Link>
         <img src="images/pudge.jpeg"/>
       </div>
     );

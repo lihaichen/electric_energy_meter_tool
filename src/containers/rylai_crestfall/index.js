@@ -5,7 +5,7 @@ export default class RylaiCrestfall extends Component {
     return (
       <div>
         <p>Pudage</p>
-        <Link to="">跳转到lina</Link>
+        <Link to="/Lina">跳转到lina</Link>
         <img src="images/rylai_crestfall.jpeg"/>
       </div>
     );

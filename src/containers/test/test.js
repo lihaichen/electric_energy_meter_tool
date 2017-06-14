@@ -37,7 +37,7 @@ export default class Test extends Component {
     return (
       <div className={`${prefixCls}`}>
         <p>测试组件</p>
-         <Link to="">跳转到pudge</Link>
+        <Link to="/Pudage">跳转到pudge</Link>
         <img src="images/1.jpg"/>
       </div>);
   }

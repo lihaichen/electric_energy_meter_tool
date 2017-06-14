@@ -5,7 +5,7 @@ export default class Lina extends Component {
     return (
       <div>
         <p>Pudage</p>
-        <Link to="">跳转到lina</Link>
+        <Link to="/Pudage">跳转到Pudage</Link>
         <img src="images/lina_inverse.jpeg"/>
       </div>
     );

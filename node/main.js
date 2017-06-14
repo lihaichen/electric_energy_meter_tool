@@ -27,14 +27,11 @@ function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({width: 800, height: 600});
   if (process.env.NODE_ENV === 'dev') {
-    mainWindow.loadURL('http://localhost:8989/index.html');
+    mainWindow.loadURL('http://localhost:9999/index.html');
   } else {
     const urlPath = path.join(__dirname, '../static');
     mainWindow.loadURL(`file://${urlPath}/index.html`);
   }
-  // and load the index.html of the app.
-  // mainWindow.loadURL(`file:///Users/lhc/work/electron/webpack2Demo/static/index.html`);
-  // mainWindow.loadURL('http://localhost:8989/index.html');
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
   mainWindow.webContents.send('transitionTo', url);

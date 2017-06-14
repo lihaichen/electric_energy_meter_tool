@@ -22,7 +22,7 @@ module.exports = {
   target: 'electron-renderer',
   entry: {
     main: [
-      'webpack-dev-server/client?http://0.0.0.0:8989',
+      'webpack-dev-server/client?http://0.0.0.0:9999',
       'webpack/hot/only-dev-server',
       './src/index.js'
     ],
@@ -53,7 +53,7 @@ module.exports = {
     historyApiFallback: true,
     proxy: webpackProxy,
     host: '0.0.0.0',
-    port: 8989,
+    port: 9999,
     disableHostCheck: true
   },
   plugins: [
