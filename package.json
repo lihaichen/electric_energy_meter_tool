@@ -8,8 +8,8 @@
     "dev": "better-npm-run gen-dev-config && better-npm-run dev",
     "build": "better-npm-run gen-build-config && better-npm-run build",
     "prod": "better-npm-run gen-prod-config && better-npm-run prod",
-    "electron-dev": "better-npm-run electron-dev",
-    "electron-build": "better-npm-run electron-build",
+    "electron-start-dev": "better-npm-run electron-start-dev",
+    "electron-start-build": "better-npm-run electron-start-build",
     "package-all": "npm run build && build -mwl",
     "package-winX64": "npm run build && build --win --x64",
     "package-winX86": "npm run build && build --win --ia32",
@@ -54,13 +54,13 @@
         "NODE_ENV": "prod"
       }
     },
-    "electron-dev": {
+    "electron-start-dev": {
       "command": "node --trace-warnings ./node_modules/.bin/electron ./node/main.js",
       "env": {
         "NODE_ENV": "dev"
       }
     },
-    "electron-build": {
+    "electron-start-build": {
       "command": "node --trace-warnings ./node_modules/.bin/electron ./node/main.js",
       "env": {
         "NODE_ENV": "build"
