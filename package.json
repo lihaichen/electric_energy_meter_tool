@@ -14,7 +14,8 @@
     "package-winX64": "npm run build && build --win --x64",
     "package-winX86": "npm run build && build --win --ia32",
     "package-linux": "npm run build && build --mac",
-    "package-mac": "npm run build && build --mac"
+    "package-mac": "npm run build && build --mac",
+    "postinstall": "install-app-deps"
   },
   "betterScripts": {
     "gen-dev-config": {
