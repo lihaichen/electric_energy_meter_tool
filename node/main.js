@@ -20,7 +20,7 @@ function createWindow() {
   } else {
     const urlPath = path.join(__dirname, '..');
     mainWindow.loadURL(`file://${urlPath}/index.html`);
-    mainWindow.webContents.openDevTools();
+    // mainWindow.webContents.openDevTools();
   }
   mainWindow.webContents.send('transitionTo', url);
   // Emitted when the window is closed.
