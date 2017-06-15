@@ -3,10 +3,11 @@ const path = require('path');
 const webpack = require('webpack');
 const assetsPath = path.resolve(__dirname, '../static/node');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-
+const contextPath = path.resolve(__dirname, '..');
 module.exports = {
   devtool: 'source-map',
   target: 'electron-main',
+  context: contextPath,
   entry: {
     main: [
       './node/main.js'

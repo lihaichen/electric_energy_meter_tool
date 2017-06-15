@@ -10,7 +10,6 @@ const url = require('url');
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
-
 function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({width: 800, height: 600});
@@ -19,12 +18,9 @@ function createWindow() {
     mainWindow.webContents.openDevTools();
     // Open the DevTools.
   } else if (process.env.NODE_ENV === 'build') {
-    const urlPath = path.join(__dirname, '../static');
-    mainWindow.loadURL(`file://${urlPath}/index.html`);
-    mainWindow.webContents.openDevTools();
-  } else {
     const urlPath = path.join(__dirname, '..');
     mainWindow.loadURL(`file://${urlPath}/index.html`);
+    // mainWindow.webContents.openDevTools();
   }
   mainWindow.webContents.send('transitionTo', url);
   // Emitted when the window is closed.

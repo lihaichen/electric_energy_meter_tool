@@ -82,13 +82,13 @@
       }
     },
     "electron-run-build": {
-      "command": "node --trace-warnings ./node_modules/.bin/electron ./node/main.js",
+      "command": "node --trace-warnings ./node_modules/.bin/electron ./static/node/node.js",
       "env": {
         "NODE_ENV": "build"
       }
     },
     "electron-run-prod": {
-      "command": "node --trace-warnings ./node_modules/.bin/electron ./node/main.js",
+      "command": "node --trace-warnings ./node_modules/.bin/electron ./static/node/node.js",
       "env": {
         "NODE_ENV": "prod"
       }
