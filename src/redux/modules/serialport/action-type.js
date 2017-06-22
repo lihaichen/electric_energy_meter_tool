@@ -1,0 +1,1 @@
+export const UPDATE_SERIAL_PORT_STATUS = 'serialPort/UPDATE_SERIAL_PORT_STATUS';

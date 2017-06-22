@@ -1,11 +1,20 @@
 import React, {Component, PropTypes} from 'react';
 import {Select, Button, message} from 'antd';
 import {ipcRenderer} from 'electron';
+import {connect} from 'react-redux';
 const prefixCls = 'SerialPort';
 const Option = Select.Option;
-
-
+import * as serialPortActions from '../../redux/modules/serialport/action';
+@connect(
+  state => ({serialPort: state.serialPort}),
+  {...serialPortActions}
+)
 export default class SerialPort extends Component {
+  static propTypes = {
+    serialPort: PropTypes.object.isRequired,
+    updateSerialPortStatus: PropTypes.func.isRequired
+  };
+
   // 构造
   constructor(props) {
     super(props);
@@ -21,10 +30,6 @@ export default class SerialPort extends Component {
   }
 
   componentWillMount() {
-    ipcRenderer.on('serialPortError', (event, xxx) => {
-      console.log(xxx);
-    });
-
     const {err, res} = ipcRenderer.sendSync('getSerialPortList', '');
     if (err) {
       message.error(`获取串口列表出错 ${err}`);
@@ -47,6 +52,7 @@ export default class SerialPort extends Component {
       if (err) {
         message.error(`关闭串口出错 ${err}`);
       } else {
+        this.props.updateSerialPortStatus({isOpen: false});
         this.setState({isOpen: false});
       }
     } else {
@@ -58,11 +64,13 @@ export default class SerialPort extends Component {
         message.error(`打开串口出错 ${err}`);
       } else {
         this.setState({isOpen: true});
+        this.props.updateSerialPortStatus({isOpen: true});
       }
     }
   }
 
   render() {
+    console.log('---->', this.props.serialPort.toJS());
     return (
       <div className={prefixCls}>
         <span>串口：</span>

@@ -5,7 +5,7 @@ let serialPort = null;
 
 ipcMain.on('getSerialPortList', (event, arg) => {
   SerialPort.list((err, res) => {
-    event.returnValue = {err: JSON.stringify(err), res};
+    event.returnValue = {err, res};
   });
 });
 
