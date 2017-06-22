@@ -3,6 +3,8 @@ import {Select, Button, message} from 'antd';
 import {ipcRenderer} from 'electron';
 const prefixCls = 'SerialPort';
 const Option = Select.Option;
+
+
 export default class SerialPort extends Component {
   // 构造
   constructor(props) {
@@ -19,6 +21,10 @@ export default class SerialPort extends Component {
   }
 
   componentWillMount() {
+    ipcRenderer.on('serialPortError', (event, xxx) => {
+      console.log(xxx);
+    });
+
     const {err, res} = ipcRenderer.sendSync('getSerialPortList', '');
     if (err) {
       message.error(`获取串口列表出错 ${err}`);
