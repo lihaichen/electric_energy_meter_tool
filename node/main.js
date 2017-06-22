@@ -18,7 +18,7 @@ function createWindow() {
     mainWindow.webContents.openDevTools();
     // Open the DevTools.
   } else {
-    const urlPath = path.join(__dirname, '..');
+    const urlPath = path.join(__dirname, '../static');
     mainWindow.loadURL(`file://${urlPath}/index.html`);
     // mainWindow.webContents.openDevTools();
   }
@@ -68,4 +68,5 @@ ipcMain.on('synchronous-message', (event, arg) => {
   console.log('synchronous-message', arg);  // prints "ping"
   event.returnValue = 'pong';
 });
-
+console.log('main');
+require('./serialport');

@@ -23,5 +23,9 @@ module.exports = {
   node: {
     __dirname: false,
     __filename: false
+  },
+  resolve: {
+    modules: ['node_modules', path.join(__dirname, '../node_modules')],
+    extensions: ['.web.js', '.js', '.json', '.jsx'],
   }
 };
