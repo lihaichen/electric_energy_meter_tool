@@ -68,5 +68,5 @@ ipcMain.on('synchronous-message', (event, arg) => {
   console.log('synchronous-message', arg);  // prints "ping"
   event.returnValue = 'pong';
 });
-console.log('main');
+
 require('./serialport');
