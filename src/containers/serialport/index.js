@@ -82,11 +82,9 @@ export default class SerialPort extends Component {
         >
           {
             serialPortList.map(item => {
-              item = item.toJS();
-              console.log('--->', item);
               return (
-                <Option value={item.comName}>
-                  {item.comName}
+                <Option value={item.get('comName')} key={item.get('comName')}>
+                  {item.get('comName')}
                 </Option>
               );
             })
@@ -102,7 +100,7 @@ export default class SerialPort extends Component {
           {
             baudrateList.map(item => {
               return (
-                <Option value={item}>
+                <Option value={item} key={item}>
                   {item}
                 </Option>
               );
@@ -119,7 +117,7 @@ export default class SerialPort extends Component {
           {
             parityList.map(item => {
               return (
-                <Option value={item.key}>
+                <Option value={item.key} key={item.key}>
                   {item.name}
                 </Option>
               );
