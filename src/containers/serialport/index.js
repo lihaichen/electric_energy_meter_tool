@@ -20,12 +20,9 @@ export default class SerialPort extends Component {
     super(props);
     // 初始状态
     this.state = {
-      serialPortList: [],
-      baudrateList: ['1200', '2400', '4800', '9600', '115200'],
       selectPort: null,
       selectBaudrate: null,
       selectParity: null,
-      isOpen: false
     };
   }
 
@@ -34,7 +31,7 @@ export default class SerialPort extends Component {
     if (err) {
       message.error(`获取串口列表出错 ${err}`);
     } else {
-      this.setState({serialPortList: res});
+      this.props.updateSerialPortStatus({serialPortList: res});
     }
   }
 
@@ -44,7 +41,8 @@ export default class SerialPort extends Component {
       message.error(`请选择串口的参数`);
       return;
     }
-    if (this.state.isOpen) {
+    const isOpen = this.props.serialPort.get('isOpen');
+    if (isOpen) {
       const {err} = ipcRenderer.sendSync('closeSerialPort', {
         path: this.state.selectPort,
         options: {parity: selectParity, baudRate: parseInt(selectBaudrate, 10)}
@@ -53,7 +51,6 @@ export default class SerialPort extends Component {
         message.error(`关闭串口出错 ${err}`);
       } else {
         this.props.updateSerialPortStatus({isOpen: false});
-        this.setState({isOpen: false});
       }
     } else {
       const {err} = ipcRenderer.sendSync('openSerialPort', {
@@ -63,14 +60,17 @@ export default class SerialPort extends Component {
       if (err) {
         message.error(`打开串口出错 ${err}`);
       } else {
-        this.setState({isOpen: true});
         this.props.updateSerialPortStatus({isOpen: true});
       }
     }
   }
 
   render() {
-    console.log('---->', this.props.serialPort.toJS());
+    const isOpen = this.props.serialPort.get('isOpen');
+    const serialPortList = this.props.serialPort.get('serialPortList');
+    const baudrateList = this.props.serialPort.get('baudrateList');
+    const parityList = this.props.serialPort.get('parityList');
+
     return (
       <div className={prefixCls}>
         <span>串口：</span>
@@ -81,9 +81,11 @@ export default class SerialPort extends Component {
           }}
         >
           {
-            this.state.serialPortList.map(item => {
+            serialPortList.map(item => {
+              item = item.toJS();
+              console.log('--->', item);
               return (
-                <Option value={item.comName} key={item.comName}>
+                <Option value={item.comName}>
                   {item.comName}
                 </Option>
               );
@@ -98,9 +100,9 @@ export default class SerialPort extends Component {
           }}
         >
           {
-            this.state.baudrateList.map(item => {
+            baudrateList.map(item => {
               return (
-                <Option value={item} key={item}>
+                <Option value={item}>
                   {item}
                 </Option>
               );
@@ -114,21 +116,21 @@ export default class SerialPort extends Component {
             this.setState({'selectParity': value});
           }}
         >
-          <Option value="none">
-            无校验
-          </Option>
-          <Option value="even">
-            偶校验
-          </Option>
-          <Option value="odd">
-            奇校验
-          </Option>
+          {
+            parityList.map(item => {
+              return (
+                <Option value={item.key}>
+                  {item.name}
+                </Option>
+              );
+            })
+          }
         </Select>
         <Button
           type="primary"
           onClick={this.onButtonClick.bind(this)}
         >
-          {this.state.isOpen ? '打开串口' : '关闭串口'}
+          {isOpen ? '打开串口' : '关闭串口'}
         </Button>
       </div>
     );
