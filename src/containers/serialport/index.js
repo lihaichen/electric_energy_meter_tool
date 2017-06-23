@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react';
-import {Select, Button, message} from 'antd';
+import {Select, Button, message, Input} from 'antd';
 import {ipcRenderer} from 'electron';
 import {connect} from 'react-redux';
 const prefixCls = 'SerialPort';
@@ -23,6 +23,7 @@ export default class SerialPort extends Component {
       selectPort: null,
       selectBaudrate: null,
       selectParity: null,
+      sendValue: ''
     };
   }
 
@@ -33,6 +34,21 @@ export default class SerialPort extends Component {
     } else {
       this.props.updateSerialPortStatus({serialPortList: res});
     }
+    ipcRenderer.on('serialPortError', this.processSerialPortError.bind(this));
+    ipcRenderer.on('serialPortData', this.processSerialPortData.bind(this));
+  }
+
+  componentWillUnmount() {
+    ipcRenderer.removeListener('serialPortError', this.processSerialPortError.bind(this));
+    ipcRenderer.removeListener('serialPortData', this.processSerialPortData.bind(this));
+  }
+
+  processSerialPortData(event, data) {
+    message.info(data.toString('ascii'));
+  }
+
+  processSerialPortError(event, err) {
+    message.error(err);
   }
 
   onButtonClick() {
@@ -64,6 +80,12 @@ export default class SerialPort extends Component {
       }
     }
   }
+
+  onSendClick() {
+    const sendData = this.state.sendValue + '';
+    ipcRenderer.send('writeSerialPort', sendData);
+  }
+
 
   render() {
     const isOpen = this.props.serialPort.get('isOpen');
@@ -128,8 +150,21 @@ export default class SerialPort extends Component {
           type="primary"
           onClick={this.onButtonClick.bind(this)}
         >
-          {isOpen ? '打开串口' : '关闭串口'}
+          {isOpen ? '关闭串口' : '打开串口'}
         </Button>
+
+        <div>
+          <Input onChange={(value) => {
+            this.setState({sendValue: value});
+          }}/>
+          <Button
+            type="primary"
+            onClick={this.onSendClick.bind(this)}
+          >
+            发送
+          </Button>
+        </div>
+
       </div>
     );
   }
