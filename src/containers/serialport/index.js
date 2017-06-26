@@ -28,19 +28,24 @@ export default class SerialPort extends Component {
   }
 
   componentWillMount() {
-    const {err, res} = ipcRenderer.sendSync('getSerialPortList', '');
-    if (err) {
-      message.error(`获取串口列表出错 ${err}`);
-    } else {
-      this.props.updateSerialPortStatus({serialPortList: res});
-    }
+    ipcRenderer.on('getSerialPortList', this.processGetSerialPortList.bind(this));
+    ipcRenderer.send('getSerialPortList', '');
     ipcRenderer.on('serialPortError', this.processSerialPortError.bind(this));
     ipcRenderer.on('serialPortData', this.processSerialPortData.bind(this));
   }
 
   componentWillUnmount() {
+    ipcRenderer.removeListener('getSerialPortList', this.processGetSerialPortList.bind(this));
     ipcRenderer.removeListener('serialPortError', this.processSerialPortError.bind(this));
     ipcRenderer.removeListener('serialPortData', this.processSerialPortData.bind(this));
+  }
+
+  processGetSerialPortList(event, data) {
+    if (data.err) {
+      message.error(data.err);
+    } else {
+      this.props.updateSerialPortStatus({serialPortList: data.res});
+    }
   }
 
   processSerialPortData(event, data) {

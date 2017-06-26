@@ -17,7 +17,7 @@ function recvSerialPortTimeout() {
 
 ipcMain.on('getSerialPortList', (event, arg) => {
   SerialPort.list((err, res) => {
-    event.returnValue = {err, res};
+    webContents.getFocusedWebContents().send('getSerialPortList', {err, res});
   });
 });
 
