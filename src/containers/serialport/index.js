@@ -23,7 +23,8 @@ export default class SerialPort extends Component {
       selectPort: null,
       selectBaudrate: null,
       selectParity: null,
-      sendValue: ''
+      sendValue: '',
+      hexList: []
     };
   }
 
@@ -87,8 +88,25 @@ export default class SerialPort extends Component {
   }
 
   onSendClick() {
-    const sendData = this.state.sendValue + '';
-    ipcRenderer.send('writeSerialPort', sendData);
+    if (this.state.hexList.length) {
+      ipcRenderer.send('writeSerialPort', this.state.hexList);
+    }
+  }
+
+  onInputChange(event) {
+    if (event.target.value) {
+      const stringList = event.target.value.split(' ');
+      const hexList = [];
+      stringList.map(item => {
+        const hex = parseInt(item, 16);
+        if (hex >= 0x00 && hex <= 0xFF) {
+          hexList.push(hex);
+        }
+      });
+      this.setState({hexList: hexList});
+    } else {
+      this.setState({hexList: []});
+    }
   }
 
 
@@ -97,7 +115,6 @@ export default class SerialPort extends Component {
     const serialPortList = this.props.serialPort.get('serialPortList');
     const baudrateList = this.props.serialPort.get('baudrateList');
     const parityList = this.props.serialPort.get('parityList');
-
     return (
       <div className={prefixCls}>
         <span>串口：</span>
@@ -159,15 +176,21 @@ export default class SerialPort extends Component {
         </Button>
 
         <div>
-          <Input onChange={(value) => {
-            this.setState({sendValue: value});
-          }}/>
+          <Input onChange={this.onInputChange.bind(this)}/>
           <Button
             type="primary"
             onClick={this.onSendClick.bind(this)}
           >
             发送
           </Button>
+        </div>
+        <div>
+          <span>发送的数据：</span>
+          <p>
+            {
+              this.state.hexList.map(item => '0x' + item.toString(16) + ' ')
+            }
+          </p>
         </div>
 
       </div>
