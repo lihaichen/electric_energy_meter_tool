@@ -50,7 +50,7 @@ export default class SerialPort extends Component {
   }
 
   processSerialPortData(event, data) {
-    message.info(data.toString('ascii'));
+    message.info(data.toString('hex'));
   }
 
   processSerialPortError(event, err) {
