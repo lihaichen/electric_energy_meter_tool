@@ -17,7 +17,7 @@ function recvSerialPortTimeout() {
 
 ipcMain.on('getSerialPortList', (event, arg) => {
   SerialPort.list((err, res) => {
-    webContents.getFocusedWebContents().send('getSerialPortList', {err, res});
+    event.sender.send('getSerialPortList', {err, res});
   });
 });
 
@@ -58,13 +58,13 @@ ipcMain.on('closeSerialPort', (event) => {
 ipcMain.on('writeSerialPort', (event, arg) => {
   let buffer = null;
   if (!serialPort) {
-    webContents.getFocusedWebContents().send('serialPortError', '请先打开串口');
+    event.sender.send('serialPortError', '请先打开串口');
     return null;
   }
   try {
     buffer = Buffer.from(arg);
   } catch (error) {
-    webContents.getFocusedWebContents().send('serialPortError', '参数转化错误');
+    event.sender.send('serialPortError', '参数转化错误');
     return null;
   }
 
