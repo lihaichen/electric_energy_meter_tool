@@ -6,6 +6,7 @@ import {Button, message, Input, Table} from 'antd';
 import AddProject from './add';
 import SelectProject from './selectProject';
 import {ipcRenderer} from 'electron';
+import moment from 'moment';
 const prefixCls = 'ProjectList';
 import './list.less';
 
@@ -26,7 +27,9 @@ export default class ProjectList extends Component {
       // 是否显示添加模态
       isShowAddModal: false,
       // 是否显示选择项目模态
-      isShowSelectModal: false
+      isShowSelectModal: false,
+      // 添加项目表单值
+      addFormValues: {}
     };
     this.columns = [
       {
@@ -43,11 +46,17 @@ export default class ProjectList extends Component {
         title: '创建时间',
         dataIndex: 'createTime',
         key: 'createTime',
+        render: (text) => {
+          return <span>{moment.unix(text).format('YYYY-MM-DD hh:mm:ss')}</span>;
+        }
       },
       {
         title: '更新时间',
         dataIndex: 'updateTime',
         key: 'updateTime',
+        render: (text) => {
+          return <span>{moment.unix(text).format('YYYY-MM-DD hh:mm:ss')}</span>;
+        }
       },
       {
         title: '操作',
@@ -62,10 +71,12 @@ export default class ProjectList extends Component {
       page: this.state.page,
       pageSize: this.state.pageSize
     });
+    ipcRenderer.on('addProject', this.processAddProject.bind(this));
   }
 
   componentWillUnmount() {
     ipcRenderer.removeListener('getSerialPortList', this.processGetProjectList.bind(this));
+    ipcRenderer.removeListener('addProject', this.processAddProject.bind(this));
   }
 
   processGetProjectList(event, {err, res}) {
@@ -76,9 +87,23 @@ export default class ProjectList extends Component {
     this.setState({list: res.list, sum: res.sum});
   }
 
+  processAddProject(event, {err}) {
+    if (err) {
+      message.error(err);
+      return null;
+    }
+    ipcRenderer.send('getProjectList', {
+      page: this.state.page,
+      pageSize: this.state.pageSize
+    });
+  }
+
   onAddHandle(values) {
-    console.log('--->', values);
-    this.setState({isShowAddModal: false, isShowSelectModal: true});
+    this.setState({
+      isShowAddModal: false,
+      isShowSelectModal: true,
+      addFormValues: values
+    });
   }
 
   onAddCancel() {
@@ -90,7 +115,8 @@ export default class ProjectList extends Component {
   }
 
   onProjectSelect(record) {
-    console.log('onProjectSelect==>', record);
+    this.state.addFormValues.selectId = record ? record.id : null;
+    ipcRenderer.send('addProject', this.state.addFormValues);
     this.setState({isShowSelectModal: false});
   }
 
