@@ -18,3 +18,4 @@ git.json
 Makefile
 config.json
 release/
+sqlite3.db
