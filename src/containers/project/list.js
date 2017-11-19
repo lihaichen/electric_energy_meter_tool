@@ -2,12 +2,13 @@
  * Created by lhc on 2017/11/19.
  */
 import React, {Component, PropTypes} from 'react';
-import {Button, message, Input, Table} from 'antd';
+import {Button, message, Input, Table, Icon, Modal} from 'antd';
 import AddProject from './add';
 import SelectProject from './selectProject';
 import {ipcRenderer} from 'electron';
 import moment from 'moment';
 const prefixCls = 'ProjectList';
+import {Link} from 'react-router';
 import './list.less';
 
 export default class ProjectList extends Component {
@@ -61,22 +62,64 @@ export default class ProjectList extends Component {
       {
         title: '操作',
         key: 'action',
+        render: (text, record) => (
+          <div>
+            <Link onClick={this.onEditClick.bind(this, record)}>
+              <Icon type="edit" style={{'fontSize': '18px'}}/>
+            </Link>
+            <Link onClick={this.onDeleteClick.bind(this, record)}>
+              <Icon type="delete" style={{'fontSize': '18px', 'paddingLeft': '10px'}}/>
+            </Link>
+          </div>
+        )
       },
     ];
   }
 
   componentWillMount() {
     ipcRenderer.on('getProjectList', this.processGetProjectList.bind(this));
-    ipcRenderer.send('getProjectList', {
-      page: this.state.page,
-      pageSize: this.state.pageSize
-    });
+    this.getProjectList();
     ipcRenderer.on('addProject', this.processAddProject.bind(this));
+    ipcRenderer.on('deleteProject', this.processDeleteProject.bind(this));
   }
 
   componentWillUnmount() {
     ipcRenderer.removeListener('getSerialPortList', this.processGetProjectList.bind(this));
     ipcRenderer.removeListener('addProject', this.processAddProject.bind(this));
+    ipcRenderer.removeListener('deleteProject', this.processDeleteProject.bind(this));
+  }
+
+  onEditClick(record) {
+    this.getProjectList();
+  }
+
+  onDeleteClick(record) {
+    Modal.confirm({
+      title: '警告',
+      content: `确定删除项目【${record.name}】？`,
+      okText: '确认',
+      cancelText: '取消',
+      onOk: () => {
+        ipcRenderer.send('deleteProject', {
+          id: record.id
+        });
+      }
+    });
+  }
+
+  getProjectList() {
+    ipcRenderer.send('getProjectList', {
+      page: this.state.page,
+      pageSize: this.state.pageSize
+    });
+  }
+
+  processDeleteProject(event, {err}) {
+    if (err) {
+      message.error(err);
+      return null;
+    }
+    this.getProjectList();
   }
 
   processGetProjectList(event, {err, res}) {
@@ -92,10 +135,7 @@ export default class ProjectList extends Component {
       message.error(err);
       return null;
     }
-    ipcRenderer.send('getProjectList', {
-      page: this.state.page,
-      pageSize: this.state.pageSize
-    });
+    this.getProjectList();
   }
 
   onAddHandle(values) {

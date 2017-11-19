@@ -42,5 +42,34 @@ ipcMain.on('addProject', async (event, arg) => {
     event.sender.send('addProject', {err, res});
   }
 });
-
-
+// 删除项目
+ipcMain.on('deleteProject', async (event, arg) => {
+  const res = {};
+  try {
+    const id = arg.id;
+    if (!id) {
+      event.sender.send('deleteProject', {err: '参数错误', res});
+    }
+    await query(`DELETE FROM project WHERE id='${id}'`);
+    event.sender.send('addProject', {err: null, res});
+  } catch (err) {
+    console.log('deleteProject', err);
+    event.sender.send('deleteProject', {err, res});
+  }
+});
+// 修改项目
+ipcMain.on('putProject', async (event, arg) => {
+  const res = {};
+  try {
+    const id = arg.id;
+    const name = arg.name;
+    const describe = arg.describe;
+    const date = moment().unix();
+    await query(`UPDATE project SET name='${name}',
+    describe='${describe}', updateTime=${date} WHERE id='${id}'`);
+    event.sender.send('addProject', {err: null, res});
+  } catch (err) {
+    console.log('putProject', err);
+    event.sender.send('putProject', {err, res});
+  }
+});
