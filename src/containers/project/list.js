@@ -3,6 +3,8 @@
  */
 import React, {Component, PropTypes} from 'react';
 import {Button, message, Input, Table} from 'antd';
+import AddProject from './add';
+import SelectProject from './selectProject';
 import {ipcRenderer} from 'electron';
 const prefixCls = 'ProjectList';
 import './list.less';
@@ -20,7 +22,11 @@ export default class ProjectList extends Component {
       // 项目列表
       list: [],
       // 总数量
-      sum: 0
+      sum: 0,
+      // 是否显示添加模态
+      isShowAddModal: false,
+      // 是否显示选择项目模态
+      isShowSelectModal: false
     };
     this.columns = [
       {
@@ -70,11 +76,38 @@ export default class ProjectList extends Component {
     this.setState({list: res.list, sum: res.sum});
   }
 
+  onAddHandle(values) {
+    console.log('--->', values);
+    this.setState({isShowAddModal: false, isShowSelectModal: true});
+  }
+
+  onAddCancel() {
+    this.setState({isShowAddModal: false});
+  }
+
+  onAddClick() {
+    this.setState({isShowAddModal: true});
+  }
+
+  onProjectSelect(record) {
+    console.log('onProjectSelect==>', record);
+    this.setState({isShowSelectModal: false});
+  }
+
+  onProjectSelectCancel() {
+    this.setState({isShowSelectModal: false});
+  }
+
   render() {
     return (
       <div className={`${prefixCls}`}>
         <div className={`${prefixCls}-header`}>
-          <Button>添加项目</Button>
+          <Button
+            type="primary"
+            onClick={this.onAddClick.bind(this)}
+          >
+            添加项目
+          </Button>
         </div>
         <div className={`${prefixCls}-body`}>
           <Table columns={this.columns}
@@ -86,6 +119,16 @@ export default class ProjectList extends Component {
                  }}
           />
         </div>
+        <AddProject
+          addHandler={this.onAddHandle.bind(this)}
+          onCancel={this.onAddCancel.bind(this)}
+          visible={this.state.isShowAddModal}
+        />
+        <SelectProject
+          onSelect={this.onProjectSelect.bind(this)}
+          visible={this.state.isShowSelectModal}
+          onCancel={this.onProjectSelectCancel.bind(this)}
+        />
       </div>
     );
   }
