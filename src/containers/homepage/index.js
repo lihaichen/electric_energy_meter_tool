@@ -6,7 +6,7 @@ import React, {Component, PropTypes} from 'react';
 import {Button, message, Input} from 'antd';
 import {ipcRenderer} from 'electron';
 import SerialPort from '../../component/serialport/index';
-
+import ProjectList from '../project/list';
 const prefixCls = 'HomePage';
 import './index.less';
 
@@ -29,7 +29,7 @@ export default class HomePage extends Component {
   render() {
     return (
       <div className={`${prefixCls}`}>
-        <SerialPort/>
+        <ProjectList/>
       </div>
     );
   }

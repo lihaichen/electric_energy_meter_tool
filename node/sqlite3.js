@@ -14,7 +14,6 @@ const sqlite3 = require("sqlite3").verbose();
 const db = new sqlite3.Database(file, createTable);
 
 function createTable() {
-  console.log('createTable test');
   db.run(`CREATE TABLE IF NOT EXISTS project (id CHAR(255) PRIMARY KEY NOT NULL,
   name CHAR(255) NOT NULL,
   describe TEXT,
@@ -47,4 +46,18 @@ function createTable() {
   createTime INTEGER NOT NULL)`);
 }
 
+function query(sql) {
+  return new Promise((resolve, reject) => {
+    db.all(sql, (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(rows);
+      }
+    });
+  });
+}
 
+module.exports = {
+  query
+};
