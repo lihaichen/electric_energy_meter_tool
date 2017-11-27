@@ -30,3 +30,34 @@ ipcMain.on('getProjectPropertyList', async (event, arg) => {
     event.sender.send('getProjectPropertyList', {err, res});
   }
 });
+// 添加项目
+ipcMain.on('addProjectProperty', async (event, arg) => {
+  const res = {};
+  try {
+    const name = arg.name;
+    const projectId = arg.projectId;
+    const value = arg.value;
+    const valueType = arg.valueType;
+    const dateIndicate = arg.dateIndicate;
+    const describe = arg.describe;
+    const date = moment().unix();
+    let sql = 'SELECT * FROM projectProperty WHERE ' +
+      `projectId='${projectId}' AND (name='${name}' OR dateIndicate='${dateIndicate}')`;
+    console.log('addProjectProperty:', sql);
+    const findResult = await query(sql);
+    if (findResult && findResult.length) {
+      event.sender.send('addProjectProperty', {err: '名字或者数据标识已经存在', res});
+      return;
+    }
+    sql = 'INSERT INTO projectProperty (id,name,projectId,describe,value, ' +
+      'valueType,dateIndicate,createTime,updateTime) VALUES ' +
+      `('${uuid.v4()}','${name}','${projectId}','${describe}', ` +
+      `'${value}','${valueType}','${dateIndicate}',${date},${date})`;
+    await query(sql);
+    console.log('addProjectProperty:', sql);
+    event.sender.send('addProjectProperty', {err: null, res});
+  } catch (err) {
+    console.log('addProjectProperty', err);
+    event.sender.send('addProjectProperty', {err, res});
+  }
+});

@@ -58,4 +58,4 @@ app.on('activate', function() {
 require('./serialport');
 require('./sqlite3');
 require('./project');
-
+require('./project_property');

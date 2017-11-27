@@ -27,7 +27,6 @@ export default class ProjectPropertyList extends Component {
       sum: 0,
       // 是否显示添加模态
       isShowAddModal: false,
-      projectId: ''
     };
     this.columns = [
       {
@@ -78,21 +77,21 @@ export default class ProjectPropertyList extends Component {
         )
       },
     ];
+    this.processAddProjectProperty = this._processAddProjectProperty.bind(this);
+    this.processGetProjectPropertyList = this._processGetProjectPropertyList.bind(this);
   }
 
   componentWillMount() {
-    this.setState({projectId: this.props.params.projectId});
-    ipcRenderer.on('getProjectPropertyList',
-      this.processGetProjectPropertyList.bind(this));
+    ipcRenderer.on('getProjectPropertyList', this.processGetProjectPropertyList);
     this.getProjectPropertyList();
-    ipcRenderer.on('addProject', this.processAddProject.bind(this));
+    ipcRenderer.on('addProjectProperty', this.processAddProjectProperty);
     ipcRenderer.on('deleteProject', this.processDeleteProject.bind(this));
   }
 
   componentWillUnmount() {
     ipcRenderer.removeListener('getSerialPortList',
       this.processGetProjectPropertyList.bind(this));
-    ipcRenderer.removeListener('addProject', this.processAddProject.bind(this));
+    ipcRenderer.removeListener('addProjectProperty', this.processAddProjectProperty);
     ipcRenderer.removeListener('deleteProject', this.processDeleteProject.bind(this));
   }
 
@@ -127,10 +126,10 @@ export default class ProjectPropertyList extends Component {
       message.error(err);
       return null;
     }
-    this.getProjectList();
+    this.getProjectPropertyList();
   }
 
-  processGetProjectPropertyList(event, {err, res}) {
+  _processGetProjectPropertyList(event, {err, res}) {
     if (err) {
       message.error(err);
       return null;
@@ -138,19 +137,20 @@ export default class ProjectPropertyList extends Component {
     this.setState({list: res.list, sum: res.sum});
   }
 
-  processAddProject(event, {err}) {
+  _processAddProjectProperty(event, {err}) {
     if (err) {
       message.error(err);
       return null;
     }
-    this.getProjectList();
-  }
-
-  onAddHandle(values) {
+    this.getProjectPropertyList();
     this.setState({
       isShowAddModal: false
     });
-    values.projectId = this.state.projectId;
+  }
+
+  onAddHandle(values) {
+    values.projectId = this.props.params.projectId;
+    ipcRenderer.send('addProjectProperty', values);
     console.log('onAddHandle==>', values);
   }
 
