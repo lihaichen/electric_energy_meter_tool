@@ -4,10 +4,10 @@
 
 
 import React, {Component, PropTypes} from 'react';
-import {Form, Input, Icon, Button, Row, Col} from 'antd';
+import {Form, Input, Select, Button, Row, Col} from 'antd';
 const prefixCls = 'ProjectPropertyForm';
 const FormItem = Form.Item;
-
+const Option = Select.Option;
 class ProjectPropertyForm extends Component {
   static propTypes = {
     handleSubmit: PropTypes.func.isRequired
@@ -36,10 +36,48 @@ class ProjectPropertyForm extends Component {
         <Form onSubmit={this.handleSubmit.bind(this)}>
           <FormItem
             {...formItemLayout}
-            label="项目名"
+            label="属性名"
           >
             {getFieldDecorator('name', {
-              rules: [{required: true, message: '项目名'}],
+              rules: [{required: true, message: '属性名'}],
+              initialValue: ''
+            })(
+              <Input/>
+            )}
+          </FormItem>
+          <FormItem
+            {...formItemLayout}
+            label="值类型"
+          >
+            {getFieldDecorator('valueType', {
+              rules: [{required: true, message: '值类型'}],
+              initialValue: ''
+            })(
+              <Select>
+                <Option value="整型" key="整型">整型</Option>
+                <Option value="浮点" key="浮点">浮点</Option>
+                <Option value="HEX" key="HEX">HEX</Option>
+                <Option value="ASCII" key="ASCII" disabled>ASCII</Option>
+              </Select>
+            )}
+          </FormItem>
+          <FormItem
+            {...formItemLayout}
+            label="值"
+          >
+            {getFieldDecorator('value', {
+              rules: [{required: true, message: '值'}],
+              initialValue: ''
+            })(
+              <Input/>
+            )}
+          </FormItem>
+          <FormItem
+            {...formItemLayout}
+            label="数据标识"
+          >
+            {getFieldDecorator('dateIndicate', {
+              rules: [{required: true, message: '数据标识'}],
               initialValue: ''
             })(
               <Input/>

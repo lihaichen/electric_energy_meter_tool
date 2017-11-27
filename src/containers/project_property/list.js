@@ -8,6 +8,7 @@ import {ipcRenderer} from 'electron';
 import {Link} from 'react-router';
 import './list.less';
 import moment from 'moment';
+import AddProperty from './add';
 const prefixCls = 'ProjectPropertyList';
 
 export default class ProjectPropertyList extends Component {
@@ -26,8 +27,7 @@ export default class ProjectPropertyList extends Component {
       sum: 0,
       // 是否显示添加模态
       isShowAddModal: false,
-      // 添加项目表单值
-      addFormValues: {}
+      projectId: ''
     };
     this.columns = [
       {
@@ -81,6 +81,7 @@ export default class ProjectPropertyList extends Component {
   }
 
   componentWillMount() {
+    this.setState({projectId: this.props.params.projectId});
     ipcRenderer.on('getProjectPropertyList',
       this.processGetProjectPropertyList.bind(this));
     this.getProjectPropertyList();
@@ -147,10 +148,10 @@ export default class ProjectPropertyList extends Component {
 
   onAddHandle(values) {
     this.setState({
-      isShowAddModal: false,
-      isShowSelectModal: true,
-      addFormValues: values
+      isShowAddModal: false
     });
+    values.projectId = this.state.projectId;
+    console.log('onAddHandle==>', values);
   }
 
   onAddCancel() {
@@ -159,16 +160,6 @@ export default class ProjectPropertyList extends Component {
 
   onAddClick() {
     this.setState({isShowAddModal: true});
-  }
-
-  onProjectSelect(record) {
-    this.state.addFormValues.selectId = record ? record.id : null;
-    ipcRenderer.send('addProject', this.state.addFormValues);
-    this.setState({isShowSelectModal: false});
-  }
-
-  onProjectSelectCancel() {
-    this.setState({isShowSelectModal: false});
   }
 
   render() {
@@ -192,6 +183,11 @@ export default class ProjectPropertyList extends Component {
                  }}
           />
         </div>
+        <AddProperty
+          visible={this.state.isShowAddModal}
+          onCancel={this.onAddCancel.bind(this)}
+          addHandler={this.onAddHandle.bind(this)}
+        />
       </div>
     );
   }
