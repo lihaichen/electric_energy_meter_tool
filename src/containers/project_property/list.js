@@ -1,17 +1,16 @@
 /**
- * Created by lhc on 2017/11/19.
+ * Created by lhc on 17-11-21.
  */
+
 import React, {Component, PropTypes} from 'react';
-import {Button, message, Input, Table, Icon, Modal} from 'antd';
-import AddProject from './add';
-import SelectProject from './selectProject';
+import {Button, message, Table, Icon, Modal} from 'antd';
 import {ipcRenderer} from 'electron';
-import moment from 'moment';
-const prefixCls = 'ProjectList';
 import {Link} from 'react-router';
 import './list.less';
+import moment from 'moment';
+const prefixCls = 'ProjectPropertyList';
 
-export default class ProjectList extends Component {
+export default class ProjectPropertyList extends Component {
   static propTypes = {};
 
   // 构造
@@ -27,21 +26,34 @@ export default class ProjectList extends Component {
       sum: 0,
       // 是否显示添加模态
       isShowAddModal: false,
-      // 是否显示选择项目模态
-      isShowSelectModal: false,
       // 添加项目表单值
       addFormValues: {}
     };
     this.columns = [
       {
-        title: '名称',
+        title: '属性名称',
         dataIndex: 'name',
         key: 'name'
       },
       {
-        title: '描述',
+        title: '属性描述',
         dataIndex: 'describe',
         key: 'describe',
+      },
+      {
+        title: '属性类型',
+        dataIndex: 'valueType',
+        key: 'valueType',
+      },
+      {
+        title: '属性值',
+        dataIndex: 'value',
+        key: 'value',
+      },
+      {
+        title: '数据标示',
+        dataIndex: 'dateIndicate',
+        key: 'dateIndicate',
       },
       {
         title: '创建时间',
@@ -52,19 +64,11 @@ export default class ProjectList extends Component {
         }
       },
       {
-        title: '更新时间',
-        dataIndex: 'updateTime',
-        key: 'updateTime',
-        render: (text) => {
-          return <span>{moment.unix(text).format('YYYY-MM-DD hh:mm:ss')}</span>;
-        }
-      },
-      {
         title: '操作',
         key: 'action',
         render: (text, record) => (
           <div>
-            <Link to={`/projectPropertyList/${record.id}`}>
+            <Link onClick={this.onEditClick.bind(this, record)}>
               <Icon type="edit" style={{'fontSize': '18px'}}/>
             </Link>
             <Link onClick={this.onDeleteClick.bind(this, record)}>
@@ -77,16 +81,22 @@ export default class ProjectList extends Component {
   }
 
   componentWillMount() {
-    ipcRenderer.on('getProjectList', this.processGetProjectList.bind(this));
-    this.getProjectList();
+    ipcRenderer.on('getProjectPropertyList',
+      this.processGetProjectPropertyList.bind(this));
+    this.getProjectPropertyList();
     ipcRenderer.on('addProject', this.processAddProject.bind(this));
     ipcRenderer.on('deleteProject', this.processDeleteProject.bind(this));
   }
 
   componentWillUnmount() {
-    ipcRenderer.removeListener('getSerialPortList', this.processGetProjectList.bind(this));
+    ipcRenderer.removeListener('getSerialPortList',
+      this.processGetProjectPropertyList.bind(this));
     ipcRenderer.removeListener('addProject', this.processAddProject.bind(this));
     ipcRenderer.removeListener('deleteProject', this.processDeleteProject.bind(this));
+  }
+
+  onEditClick(record) {
+    this.getProjectPropertyList();
   }
 
   onDeleteClick(record) {
@@ -103,10 +113,11 @@ export default class ProjectList extends Component {
     });
   }
 
-  getProjectList() {
-    ipcRenderer.send('getProjectList', {
+  getProjectPropertyList() {
+    ipcRenderer.send('getProjectPropertyList', {
       page: this.state.page,
-      pageSize: this.state.pageSize
+      pageSize: this.state.pageSize,
+      projectId: this.props.params.projectId
     });
   }
 
@@ -118,7 +129,7 @@ export default class ProjectList extends Component {
     this.getProjectList();
   }
 
-  processGetProjectList(event, {err, res}) {
+  processGetProjectPropertyList(event, {err, res}) {
     if (err) {
       message.error(err);
       return null;
@@ -168,7 +179,7 @@ export default class ProjectList extends Component {
             type="primary"
             onClick={this.onAddClick.bind(this)}
           >
-            添加项目
+            添加属性
           </Button>
         </div>
         <div className={`${prefixCls}-body`}>
@@ -181,16 +192,6 @@ export default class ProjectList extends Component {
                  }}
           />
         </div>
-        <AddProject
-          addHandler={this.onAddHandle.bind(this)}
-          onCancel={this.onAddCancel.bind(this)}
-          visible={this.state.isShowAddModal}
-        />
-        <SelectProject
-          onSelect={this.onProjectSelect.bind(this)}
-          visible={this.state.isShowSelectModal}
-          onCancel={this.onProjectSelectCancel.bind(this)}
-        />
       </div>
     );
   }
