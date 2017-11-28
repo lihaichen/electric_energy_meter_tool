@@ -84,14 +84,13 @@ export default class ProjectPropertyList extends Component {
 
   componentWillMount() {
     ipcRenderer.on('getProjectPropertyList', this.processGetProjectPropertyList);
-    this.getProjectPropertyList();
     ipcRenderer.on('addProjectProperty', this.processAddProjectProperty);
     ipcRenderer.on('deleteProjectProperty', this.processDeleteProjectProperty.bind(this));
+    this.getProjectPropertyList();
   }
 
   componentWillUnmount() {
-    ipcRenderer.removeListener('getSerialPortList',
-      this.processGetProjectPropertyList.bind(this));
+    ipcRenderer.removeListener('getSerialPortList',this.processGetProjectPropertyList);
     ipcRenderer.removeListener('addProjectProperty', this.processAddProjectProperty);
     ipcRenderer.removeListener('deleteProjectProperty', this.processDeleteProjectProperty.bind(this));
   }
