@@ -54,10 +54,25 @@ ipcMain.on('addProjectProperty', async (event, arg) => {
       `('${uuid.v4()}','${name}','${projectId}','${describe}', ` +
       `'${value}','${valueType}','${dateIndicate}',${date},${date})`;
     await query(sql);
-    console.log('addProjectProperty:', sql);
     event.sender.send('addProjectProperty', {err: null, res});
   } catch (err) {
     console.log('addProjectProperty', err);
     event.sender.send('addProjectProperty', {err, res});
   }
 });
+// 删除项目属性
+ipcMain.on('deleteProjectProperty', async (event, arg) => {
+  const res = {};
+  try {
+    const id = arg.id;
+    if (!id) {
+      event.sender.send('deleteProjectProperty', {err: '参数错误', res});
+    }
+    await query(`DELETE FROM projectProperty WHERE id='${id}'`);
+    event.sender.send('deleteProjectProperty', {err: null, res});
+  } catch (err) {
+    console.log('deleteProjectProperty', err);
+    event.sender.send('deleteProjectProperty', {err, res});
+  }
+});
+

@@ -79,38 +79,25 @@ export default class ProjectPropertyList extends Component {
     ];
     this.processAddProjectProperty = this._processAddProjectProperty.bind(this);
     this.processGetProjectPropertyList = this._processGetProjectPropertyList.bind(this);
+    this.processDeleteProjectProperty = this._processDeleteProjectProperty.bind(this);
   }
 
   componentWillMount() {
     ipcRenderer.on('getProjectPropertyList', this.processGetProjectPropertyList);
     this.getProjectPropertyList();
     ipcRenderer.on('addProjectProperty', this.processAddProjectProperty);
-    ipcRenderer.on('deleteProject', this.processDeleteProject.bind(this));
+    ipcRenderer.on('deleteProjectProperty', this.processDeleteProjectProperty.bind(this));
   }
 
   componentWillUnmount() {
     ipcRenderer.removeListener('getSerialPortList',
       this.processGetProjectPropertyList.bind(this));
     ipcRenderer.removeListener('addProjectProperty', this.processAddProjectProperty);
-    ipcRenderer.removeListener('deleteProject', this.processDeleteProject.bind(this));
+    ipcRenderer.removeListener('deleteProjectProperty', this.processDeleteProjectProperty.bind(this));
   }
 
   onEditClick(record) {
     this.getProjectPropertyList();
-  }
-
-  onDeleteClick(record) {
-    Modal.confirm({
-      title: '警告',
-      content: `确定删除项目【${record.name}】？`,
-      okText: '确认',
-      cancelText: '取消',
-      onOk: () => {
-        ipcRenderer.send('deleteProject', {
-          id: record.id
-        });
-      }
-    });
   }
 
   getProjectPropertyList() {
@@ -121,7 +108,7 @@ export default class ProjectPropertyList extends Component {
     });
   }
 
-  processDeleteProject(event, {err}) {
+  _processDeleteProjectProperty(event, {err}) {
     if (err) {
       message.error(err);
       return null;
@@ -151,7 +138,6 @@ export default class ProjectPropertyList extends Component {
   onAddHandle(values) {
     values.projectId = this.props.params.projectId;
     ipcRenderer.send('addProjectProperty', values);
-    console.log('onAddHandle==>', values);
   }
 
   onAddCancel() {
@@ -160,6 +146,20 @@ export default class ProjectPropertyList extends Component {
 
   onAddClick() {
     this.setState({isShowAddModal: true});
+  }
+
+  onDeleteClick(record) {
+    Modal.confirm({
+      title: '警告',
+      content: `确定删除属性【${record.name}】？`,
+      okText: '确认',
+      cancelText: '取消',
+      onOk: () => {
+        ipcRenderer.send('deleteProjectProperty', {
+          id: record.id
+        });
+      }
+    });
   }
 
   render() {
