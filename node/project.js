@@ -5,6 +5,7 @@ const {ipcMain} = require('electron');
 const {query} = require('./sqlite3');
 const moment = require('moment');
 const uuid = require('node-uuid');
+const projectPropertyUtils = require('./project_property');
 // 获取项目列表
 ipcMain.on('getProjectList', async (event, arg) => {
   const res = {};
@@ -32,10 +33,17 @@ ipcMain.on('addProject', async (event, arg) => {
   const res = {};
   try {
     const name = arg.name;
+    const selectId = arg.selectId;
     const describe = arg.describe;
     const date = moment().unix();
+    const id = uuid.v4();
     await query(`INSERT INTO project (id,name,describe,createTime,updateTime) 
-    VALUES ('${uuid.v4()}','${name}', '${describe}',${date},${date})`);
+    VALUES ('${id}','${name}', '${describe}',${date},${date})`);
+    if (selectId) {
+      const propertyList = await query(`SELECT * FROM projectProperty WHERE projectId='${selectId}'`);
+      propertyList.map(item => item.projectId = id);
+      await Promise.all(propertyList.map(item => projectPropertyUtils.insertProjectProperty(item)));
+    }
     event.sender.send('addProject', {err: null, res});
   } catch (err) {
     console.log('addProject', err);
