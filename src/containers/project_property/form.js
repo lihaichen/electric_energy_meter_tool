@@ -31,6 +31,7 @@ class ProjectPropertyForm extends Component {
       labelCol: {span: 6},
       wrapperCol: {span: 14}
     };
+    const propertyInfo = this.props.propertyInfo || {};
     return (
       <div className={`${prefixCls}`}>
         <Form onSubmit={this.handleSubmit.bind(this)}>
@@ -40,7 +41,7 @@ class ProjectPropertyForm extends Component {
           >
             {getFieldDecorator('name', {
               rules: [{required: true, message: '属性名'}],
-              initialValue: ''
+              initialValue: propertyInfo.name
             })(
               <Input/>
             )}
@@ -51,7 +52,7 @@ class ProjectPropertyForm extends Component {
           >
             {getFieldDecorator('valueType', {
               rules: [{required: true, message: '值类型'}],
-              initialValue: ''
+              initialValue: propertyInfo.valueType
             })(
               <Select>
                 <Option value="整型" key="整型">整型</Option>
@@ -67,7 +68,7 @@ class ProjectPropertyForm extends Component {
           >
             {getFieldDecorator('value', {
               rules: [{required: true, message: '值'}],
-              initialValue: ''
+              initialValue: propertyInfo.value
             })(
               <Input/>
             )}
@@ -78,7 +79,7 @@ class ProjectPropertyForm extends Component {
           >
             {getFieldDecorator('dateIndicate', {
               rules: [{required: true, message: '数据标识'}],
-              initialValue: ''
+              initialValue: propertyInfo.dateIndicate
             })(
               <Input/>
             )}
@@ -89,7 +90,7 @@ class ProjectPropertyForm extends Component {
           >
             {getFieldDecorator('describe', {
               rules: [{required: true, message: '描述'}],
-              initialValue: ''
+              initialValue: propertyInfo.describe
             })(
               <Input/>
             )}

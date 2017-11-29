@@ -7,9 +7,10 @@ import {Modal} from 'antd';
 const prefixCls = 'EditProperty';
 export default class EditProperty extends Component {
   static propTypes = {
-    addHandler: PropTypes.func.isRequired,
+    editHandle: PropTypes.func.isRequired,
     visible: PropTypes.bool.isRequired,
-    onCancel: PropTypes.func.isRequired
+    onCancel: PropTypes.func.isRequired,
+    propertyInfo: PropTypes.object.isRequired
   };
 
   // 构造
@@ -27,7 +28,10 @@ export default class EditProperty extends Component {
         onCancel={this.props.onCancel}
         maskClosable={false}
       >
-        <PropertyForm handleSubmit={this.props.addHandler.bind(this)}/>
+        <PropertyForm
+          propertyInfo={this.props.propertyInfo}
+          handleSubmit={this.props.editHandle.bind(this)}
+        />
       </Modal>
     );
   }

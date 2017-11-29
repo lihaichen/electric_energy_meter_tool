@@ -9,6 +9,7 @@ import {Link} from 'react-router';
 import './list.less';
 import moment from 'moment';
 import AddProperty from './add';
+import EditProperty from './edit';
 const prefixCls = 'ProjectPropertyList';
 
 export default class ProjectPropertyList extends Component {
@@ -27,6 +28,8 @@ export default class ProjectPropertyList extends Component {
       sum: 0,
       // 是否显示添加模态
       isShowAddModal: false,
+      isShowEditModal: false,
+      editProperty: {}
     };
     this.columns = [
       {
@@ -96,7 +99,7 @@ export default class ProjectPropertyList extends Component {
   }
 
   onEditClick(record) {
-    this.getProjectPropertyList();
+    this.setState({isShowEditModal: true, editProperty: record});
   }
 
   getProjectPropertyList() {
@@ -147,6 +150,14 @@ export default class ProjectPropertyList extends Component {
     this.setState({isShowAddModal: true});
   }
 
+  onEditCancel() {
+    this.setState({isShowEditModal: false});
+  }
+
+  onEditHandle(values) {
+    console.log('onEditHandle==>', values);
+  }
+
   onDeleteClick(record) {
     Modal.confirm({
       title: '警告',
@@ -187,6 +198,11 @@ export default class ProjectPropertyList extends Component {
           onCancel={this.onAddCancel.bind(this)}
           addHandler={this.onAddHandle.bind(this)}
         />
+        <EditProperty
+          propertyInfo={this.state.editProperty}
+          editHandle={this.onEditHandle.bind(this)}
+          visible={this.state.isShowEditModal}
+          onCancel={this.onEditCancel.bind(this)}/>
       </div>
     );
   }
