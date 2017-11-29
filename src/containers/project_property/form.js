@@ -18,6 +18,26 @@ class ProjectPropertyForm extends Component {
     super(props);
   }
 
+  dateIndicateCheck(rule, value, callback) {
+    if (!value) {
+      callback();
+    }
+    try {
+      const valueInt = parseInt(value, 0);
+      if (isNaN(valueInt)) {
+        callback('请输入有效的数字');
+        return null;
+      }
+      if (valueInt < 0 || value > 0xFFFF) {
+        callback('数据范围为 0x0000 - 0xFFFF');
+      } else {
+        callback();
+      }
+    } catch (err) {
+      callback('请输入有效的数字');
+    }
+  }
+
   handleSubmit(event) {
     event.preventDefault();
     this.props.form.validateFields((err, values) => {
@@ -78,7 +98,9 @@ class ProjectPropertyForm extends Component {
             label="数据标识"
           >
             {getFieldDecorator('dateIndicate', {
-              rules: [{required: true, message: '数据标识'}],
+              rules: [{required: true, message: '数据标识'}, {
+                validator: this.dateIndicateCheck.bind(this)
+              }],
               initialValue: propertyInfo.dateIndicate
             })(
               <Input/>
