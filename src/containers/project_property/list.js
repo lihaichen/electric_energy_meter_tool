@@ -107,6 +107,7 @@ export default class ProjectPropertyList extends Component {
   }
 
   getProjectPropertyList() {
+    console.log('this.props.params.projectId', this.props.params.projectId);
     ipcRenderer.send('getProjectPropertyList', {
       page: this.state.page,
       pageSize: this.state.pageSize,

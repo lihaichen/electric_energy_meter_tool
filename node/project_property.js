@@ -28,10 +28,10 @@ ipcMain.on('getProjectPropertyList', async (event, arg) => {
     res.page = page;
     res.pageSIze = pageSize;
     res.projectId = projectId;
-    const count = await query('SELECT count(*) as count FROM projectProperty');
+    const count = await query(`SELECT count(*) as count FROM projectProperty WHERE projectId='${projectId}'`);
     res.count = count[0].count;
     const offset = (page - 1) * pageSize;
-    res.list = await query(`SELECT * FROM projectProperty  LIMIT ${pageSize} OFFSET ${offset}`);
+    res.list = await query(`SELECT * FROM projectProperty WHERE projectId='${projectId}' LIMIT ${pageSize} OFFSET ${offset}`);
     res.list.map(item => item.key = item.id);
     event.sender.send('getProjectPropertyList', {err: null, res});
   } catch (err) {
