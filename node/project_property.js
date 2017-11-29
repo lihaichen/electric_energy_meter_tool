@@ -90,7 +90,7 @@ ipcMain.on('putProjectProperty', async (event, arg) => {
     event.sender.send('putProjectProperty', {err: null, res});
   } catch (err) {
     console.log('putProjectProperty', err);
-    event.sender.send('putProjectProperty', {err, res});
+    event.sender.send('putProjectProperty', {err: err.toString(), res});
   }
 });
 
