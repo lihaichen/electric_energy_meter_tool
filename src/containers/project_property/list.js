@@ -90,7 +90,7 @@ export default class ProjectPropertyList extends Component {
   }
 
   componentWillUnmount() {
-    ipcRenderer.removeListener('getSerialPortList',this.processGetProjectPropertyList);
+    ipcRenderer.removeListener('getSerialPortList', this.processGetProjectPropertyList);
     ipcRenderer.removeListener('addProjectProperty', this.processAddProjectProperty);
     ipcRenderer.removeListener('deleteProjectProperty', this.processDeleteProjectProperty.bind(this));
   }
