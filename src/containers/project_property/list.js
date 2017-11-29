@@ -83,19 +83,23 @@ export default class ProjectPropertyList extends Component {
     this.processAddProjectProperty = this._processAddProjectProperty.bind(this);
     this.processGetProjectPropertyList = this._processGetProjectPropertyList.bind(this);
     this.processDeleteProjectProperty = this._processDeleteProjectProperty.bind(this);
+    // 修改事件注册
+    this.processPutProjectProperty = this._processPutProjectProperty.bind(this);
   }
 
   componentWillMount() {
     ipcRenderer.on('getProjectPropertyList', this.processGetProjectPropertyList);
     ipcRenderer.on('addProjectProperty', this.processAddProjectProperty);
-    ipcRenderer.on('deleteProjectProperty', this.processDeleteProjectProperty.bind(this));
+    ipcRenderer.on('deleteProjectProperty', this.processDeleteProjectProperty);
+    ipcRenderer.on('putProjectProperty', this.processPutProjectProperty);
     this.getProjectPropertyList();
   }
 
   componentWillUnmount() {
     ipcRenderer.removeListener('getSerialPortList', this.processGetProjectPropertyList);
     ipcRenderer.removeListener('addProjectProperty', this.processAddProjectProperty);
-    ipcRenderer.removeListener('deleteProjectProperty', this.processDeleteProjectProperty.bind(this));
+    ipcRenderer.removeListener('deleteProjectProperty', this.processDeleteProjectProperty);
+    ipcRenderer.removeListener('putProjectProperty', this.processPutProjectProperty);
   }
 
   onEditClick(record) {
@@ -108,6 +112,15 @@ export default class ProjectPropertyList extends Component {
       pageSize: this.state.pageSize,
       projectId: this.props.params.projectId
     });
+  }
+
+  _processPutProjectProperty(event, {err}) {
+    if (err) {
+      message.error(err);
+      return null;
+    }
+    this.onEditCancel();
+    this.getProjectPropertyList();
   }
 
   _processDeleteProjectProperty(event, {err}) {
@@ -155,7 +168,12 @@ export default class ProjectPropertyList extends Component {
   }
 
   onEditHandle(values) {
-    console.log('onEditHandle==>', values);
+    values.projectId = this.props.params.projectId;
+    if (!this.state.editProperty.id) {
+      message.error('内部错误，id为空');
+    }
+    values.id = this.state.editProperty.id;
+    ipcRenderer.send('putProjectProperty', values);
   }
 
   onDeleteClick(record) {
@@ -199,6 +217,7 @@ export default class ProjectPropertyList extends Component {
           addHandler={this.onAddHandle.bind(this)}
         />
         <EditProperty
+          key={this.state.editProperty.id || 'EditProperty'}
           propertyInfo={this.state.editProperty}
           editHandle={this.onEditHandle.bind(this)}
           visible={this.state.isShowEditModal}

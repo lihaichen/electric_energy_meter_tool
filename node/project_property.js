@@ -60,6 +60,40 @@ ipcMain.on('addProjectProperty', async (event, arg) => {
     event.sender.send('addProjectProperty', {err, res});
   }
 });
+
+// 修改项目属性
+ipcMain.on('putProjectProperty', async (event, arg) => {
+  const res = {};
+  try {
+    const name = arg.name;
+    const id = arg.id;
+    const projectId = arg.projectId;
+    const value = arg.value;
+    const valueType = arg.valueType;
+    const dateIndicate = arg.dateIndicate;
+    const describe = arg.describe;
+    const date = moment().unix();
+    let sql = 'SELECT * FROM projectProperty WHERE ' +
+      `projectId='${projectId}' AND id != '${id}' AND (name='${name}' OR dateIndicate='${dateIndicate}')`;
+    const findResult = await query(sql);
+    if (findResult && findResult.length) {
+      event.sender.send('putProjectProperty', {err: '名字或者数据标识已经存在', res});
+      return;
+    }
+    sql = 'UPDATE projectProperty ' +
+      `SET name='${name}', describe='${describe}', ` +
+      `value='${value}',valueType='${valueType}', ` +
+      `dateIndicate='${dateIndicate}',updateTime=${date} ` +
+      ` WHERE id='${id}'`;
+    console.log('putProjectProperty:', sql);
+    await query(sql);
+    event.sender.send('putProjectProperty', {err: null, res});
+  } catch (err) {
+    console.log('putProjectProperty', err);
+    event.sender.send('putProjectProperty', {err, res});
+  }
+});
+
 // 删除项目属性
 ipcMain.on('deleteProjectProperty', async (event, arg) => {
   const res = {};
