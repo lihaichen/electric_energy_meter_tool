@@ -5,6 +5,7 @@ import {syncHistoryWithStore} from 'react-router-redux';
 import HomePage from './containers/homepage/index';
 import App from './component/app/index';
 import ProjectPropertyList from './containers/project_property/list';
+import Measure from './containers/measure/index';
 
 export default function(store) {
   const history = syncHistoryWithStore(hashHistory, store);
@@ -12,6 +13,7 @@ export default function(store) {
     <Router history={history}>
       <Route path="/" component={App}>
         <IndexRoute component={HomePage}/>
+        <Route path="/measure" component={Measure}/>
         <Route path="/homepage" component={HomePage}/>
         <Route path="/projectPropertyList/:projectId" component={ProjectPropertyList}/>
         <Route path="/test" component={Test}/>

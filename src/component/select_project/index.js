@@ -54,7 +54,7 @@ export default class SelectProject extends Component {
   }
 
   componentWillUnmount() {
-    ipcRenderer.removeListener('getSerialPortList', this.processGetProjectList);
+    ipcRenderer.removeListener('getProjectList', this.processGetProjectList);
   }
 
   _processGetProjectList(event, {err, res}) {

@@ -29,6 +29,9 @@ export default class Header extends Component {
       case '项目管理':
         this.context.router.push('/homepage');
         break;
+      case '测量':
+        this.context.router.push('/measure');
+        break;
       default:
         break;
     }
