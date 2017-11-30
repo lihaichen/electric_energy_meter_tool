@@ -9,6 +9,9 @@ const prefixCls = 'Header';
 
 export default class Header extends Component {
   static propTypes = {};
+  static contextTypes = {
+    router: PropTypes.object.isRequired,
+  };
 
   // 构造
   constructor(props) {
@@ -21,11 +24,22 @@ export default class Header extends Component {
 
   }
 
+  onMenuClick(event) {
+    switch (event.key) {
+      case '项目管理':
+        this.context.router.push('/homepage');
+        break;
+      default:
+        break;
+    }
+  }
+
   render() {
     return (
       <div className={`${prefixCls}`}>
         <Menu
           mode="horizontal"
+          onClick={this.onMenuClick.bind(this)}
         >
           <Menu.Item key="测量">
             测量

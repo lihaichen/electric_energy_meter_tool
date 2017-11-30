@@ -74,19 +74,22 @@ export default class ProjectList extends Component {
         )
       },
     ];
+    this.processGetProjectList = this._processGetProjectList.bind(this);
+    this.processAddProject = this._processAddProject.bind(this);
+    this.processDeleteProject = this._processDeleteProject.bind(this);
   }
 
   componentWillMount() {
-    ipcRenderer.on('getProjectList', this.processGetProjectList.bind(this));
+    ipcRenderer.on('getProjectList', this.processGetProjectList);
+    ipcRenderer.on('addProject', this.processAddProject);
+    ipcRenderer.on('deleteProject', this.processDeleteProject);
     this.getProjectList();
-    ipcRenderer.on('addProject', this.processAddProject.bind(this));
-    ipcRenderer.on('deleteProject', this.processDeleteProject.bind(this));
   }
 
   componentWillUnmount() {
-    ipcRenderer.removeListener('getSerialPortList', this.processGetProjectList.bind(this));
-    ipcRenderer.removeListener('addProject', this.processAddProject.bind(this));
-    ipcRenderer.removeListener('deleteProject', this.processDeleteProject.bind(this));
+    ipcRenderer.removeListener('getProjectList', this.processGetProjectList);
+    ipcRenderer.removeListener('addProject', this.processAddProject);
+    ipcRenderer.removeListener('deleteProject', this.processDeleteProject);
   }
 
   onDeleteClick(record) {
@@ -110,7 +113,7 @@ export default class ProjectList extends Component {
     });
   }
 
-  processDeleteProject(event, {err}) {
+  _processDeleteProject(event, {err}) {
     if (err) {
       message.error(err);
       return null;
@@ -118,7 +121,7 @@ export default class ProjectList extends Component {
     this.getProjectList();
   }
 
-  processGetProjectList(event, {err, res}) {
+  _processGetProjectList(event, {err, res}) {
     if (err) {
       message.error(err);
       return null;
@@ -126,7 +129,7 @@ export default class ProjectList extends Component {
     this.setState({list: res.list, sum: res.sum});
   }
 
-  processAddProject(event, {err}) {
+  _processAddProject(event, {err}) {
     if (err) {
       message.error(err);
       return null;

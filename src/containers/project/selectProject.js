@@ -42,23 +42,19 @@ export default class SelectProject extends Component {
         key: 'createTime',
       }
     ];
+    this.processGetSerialPortList = this._processGetSerialPortList.bind(this);
   }
 
   componentWillMount() {
-    ipcRenderer.on('getProjectList',
-      this.processGetProjectList.bind(this));
-    ipcRenderer.send('getProjectList', {
-      page: this.state.page,
-      pageSize: this.state.pageSize
-    });
+    ipcRenderer.on('getSerialPortList', this.processGetSerialPortList);
+    ipcRenderer.send('getSerialPortList', {});
   }
 
   componentWillUnmount() {
-    ipcRenderer.removeListener('getSerialPortList',
-      this.processGetProjectList.bind(this));
+    ipcRenderer.removeListener('getSerialPortList', this.processGetSerialPortList);
   }
 
-  processGetProjectList(event, {err, res}) {
+  _processGetSerialPortList(event, {err, res}) {
     if (err) {
       message.error(err);
       return null;

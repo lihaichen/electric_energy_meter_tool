@@ -7,7 +7,9 @@ import './index.less';
 const prefixCls = 'App';
 export default class App extends Component {
   static propTypes = {};
-
+  static contextTypes = {
+    router: PropTypes.object.isRequired,
+  };
   // 构造
   constructor(props) {
     super(props);
