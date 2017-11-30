@@ -4,7 +4,7 @@
 import React, {Component, PropTypes} from 'react';
 import {Button, message, Input, Table, Icon, Modal} from 'antd';
 import AddProject from './add';
-import SelectProject from './selectProject';
+import SelectProject from '../../component/select_project/index';
 import {ipcRenderer} from 'electron';
 import moment from 'moment';
 const prefixCls = 'ProjectList';
