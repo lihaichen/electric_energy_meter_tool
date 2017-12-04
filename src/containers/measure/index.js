@@ -36,8 +36,8 @@ export default class Measure extends Component {
   render() {
     return (
       <div className={`${prefixCls}`}>
-        <p>test</p>
         <SelectProject
+          isShowEnterButton={false}
           onSelect={this.onProjectSelect.bind(this)}
           visible={this.state.isShowSelectModal}
           onCancel={this.onProjectSelectCancel.bind(this)}

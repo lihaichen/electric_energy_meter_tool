@@ -4,6 +4,7 @@
 import React, {Component, PropTypes} from 'react';
 import {Button, message, Table, Modal, Row, Col} from 'antd';
 import {ipcRenderer} from 'electron';
+import moment from 'moment';
 const prefixCls = 'SelectProject';
 
 export default class SelectProject extends Component {
@@ -11,6 +12,9 @@ export default class SelectProject extends Component {
     visible: PropTypes.bool.isRequired,
     onSelect: PropTypes.func.isRequired,
     onCancel: PropTypes.func.isRequired
+  };
+  static defaultProps = {
+    isShowEnterButton: true
   };
 
   // 构造
@@ -40,6 +44,9 @@ export default class SelectProject extends Component {
         title: '创建时间',
         dataIndex: 'createTime',
         key: 'createTime',
+        render: (text) => {
+          return <span>{moment.unix(text).format('YYYY-MM-DD hh:mm:ss')}</span>;
+        }
       }
     ];
     this.processGetProjectList = this._processGetProjectList.bind(this);
@@ -87,11 +94,13 @@ export default class SelectProject extends Component {
         />
         <Row>
           <Col offset={10}>
-            <Button
-              onClick={() => this.props.onSelect()}
-              className={`${prefixCls}-button`}>
-              保存
-            </Button>
+            {this.props.isShowEnterButton ?
+              <Button
+                type="primary"
+                onClick={() => this.props.onSelect()}
+                className={`${prefixCls}-button`}>
+                确定
+              </Button> : ''}
           </Col>
         </Row>
       </Modal>
