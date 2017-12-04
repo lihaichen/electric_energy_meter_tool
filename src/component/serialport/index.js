@@ -25,24 +25,27 @@ export default class SerialPort extends Component {
       isOpen: false,
       isLoading: false
     };
+    this.processGetSerialPortList = this._processGetSerialPortList.bind(this);
+    this.processSerialPortError = this._processSerialPortError.bind(this);
+    this.processSerialPortData = this._processSerialPortData.bind(this);
   }
 
   componentWillMount() {
-    ipcRenderer.on('getSerialPortList', this.processGetSerialPortList.bind(this));
+    ipcRenderer.on('getSerialPortList', this.processGetSerialPortList);
     ipcRenderer.send('getSerialPortList', '');
-    ipcRenderer.on('serialPortError', this.processSerialPortError.bind(this));
-    ipcRenderer.on('serialPortData', this.processSerialPortData.bind(this));
+    ipcRenderer.on('serialPortError', this.processSerialPortError);
+    ipcRenderer.on('serialPortData', this.processSerialPortData);
   }
 
   componentWillUnmount() {
     ipcRenderer.sendSync('closeSerialPort', {});
-    ipcRenderer.removeListener('getSerialPortList', this.processGetSerialPortList.bind(this));
-    ipcRenderer.removeListener('serialPortError', this.processSerialPortError.bind(this));
-    ipcRenderer.removeListener('serialPortData', this.processSerialPortData.bind(this));
+    ipcRenderer.removeListener('getSerialPortList', this.processGetSerialPortList);
+    ipcRenderer.removeListener('serialPortError', this.processSerialPortError);
+    ipcRenderer.removeListener('serialPortData', this.processSerialPortData);
   }
 
 
-  processGetSerialPortList(event, {err, res}) {
+  _processGetSerialPortList(event, {err, res}) {
     if (err) {
       message.error(err);
       return;
@@ -50,11 +53,11 @@ export default class SerialPort extends Component {
     this.setState({portList: res});
   }
 
-  processSerialPortData(event, data) {
+  _processSerialPortData(event, data) {
     message.info(data.toString('hex'));
   }
 
-  processSerialPortError(event, err) {
+  _processSerialPortError(event, err) {
     message.error(err);
   }
 

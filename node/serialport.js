@@ -48,6 +48,7 @@ ipcMain.on('openSerialPort', (event, arg) => {
 ipcMain.on('closeSerialPort', (event) => {
   if (!serialPort) {
     event.returnValue = {err: '串口没有打开'};
+    return null;
   }
 
   serialPort.close((err, res) => {
