@@ -37,14 +37,17 @@ export default class Measure extends Component {
         key: 'valueType',
       },
       {
+        title: '数据标示',
+        dataIndex: 'dateIndicate',
+        key: 'dateIndicate',
+      },
+      {
         title: '属性值',
         dataIndex: 'value',
         key: 'value',
       },
       {
-        title: '数据标示',
-        dataIndex: 'dateIndicate',
-        key: 'dateIndicate',
+        title: '测量值'
       }
     ];
     this.processGetProjectPropertyList = this._processGetProjectPropertyList.bind(this);
