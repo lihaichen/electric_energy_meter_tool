@@ -6,6 +6,7 @@ import React, {Component, PropTypes} from 'react';
 import SelectProject from '../../component/select_project/index';
 import {Button, message, Table, Modal, Row, Col} from 'antd';
 import {ipcRenderer} from 'electron';
+import SerialPort from '../../component/serialport/index';
 const prefixCls = 'Measure';
 
 export default class Measure extends Component {
@@ -36,6 +37,9 @@ export default class Measure extends Component {
   render() {
     return (
       <div className={`${prefixCls}`}>
+        <div className={`${prefixCls}-serial`}>
+          <SerialPort/>
+        </div>
         <SelectProject
           isShowEnterButton={false}
           onSelect={this.onProjectSelect.bind(this)}

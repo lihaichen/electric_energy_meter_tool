@@ -35,6 +35,7 @@ export default class SerialPort extends Component {
   }
 
   componentWillUnmount() {
+    ipcRenderer.sendSync('closeSerialPort', {});
     ipcRenderer.removeListener('getSerialPortList', this.processGetSerialPortList.bind(this));
     ipcRenderer.removeListener('serialPortError', this.processSerialPortError.bind(this));
     ipcRenderer.removeListener('serialPortData', this.processSerialPortData.bind(this));
@@ -67,10 +68,7 @@ export default class SerialPort extends Component {
     const isOpen = this.state.isOpen;
     if (isOpen) {
       this.setState({isLoading: true});
-      const {err} = ipcRenderer.sendSync('closeSerialPort', {
-        path: this.state.selectPort,
-        options: {parity: selectParity, baudRate: parseInt(selectBaudRate, 10)}
-      });
+      const {err} = ipcRenderer.sendSync('closeSerialPort', {});
       if (err) {
         message.error(`关闭串口出错 ${err}`);
       } else {
